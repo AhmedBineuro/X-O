@@ -1,0 +1,147 @@
+#pragma once
+#include <vector>
+#include "XOEngine.hpp"
+
+class Tester
+{
+public:
+    struct Play
+    {
+        short row;
+        short column;
+    };
+    Tester()
+    {
+        plays.reserve(5); // The minimum number of plays for a win is 5
+    }
+    Tester(std::string FileURL) : Tester()
+    {
+        loadTest(FileURL);
+    }
+    void loadTest(std::string FileURL)
+    {
+        FILE *f = fopen(FileURL.c_str(), "r");
+        if (f == nullptr)
+        {
+            std::cout << "File path is invalid\n";
+            return;
+        }
+        char c = getc(f);
+        std::string currentstr = "";
+        while (c != EOF)
+        {
+            if (c >= 'A' && c <= 'Z')
+            {
+                currentstr += c;
+                if (currentstr == "OUTCOME")
+                {
+                    c = getc(f); // consume character
+                    // Consume white space
+                    while (c == ' ')
+                    {
+                        c = getc(f);
+                    }
+                    if (c == '-')
+                    {
+                        std::string outcome;
+                        outcome += c;
+                        c = getc(f); // consume character
+                        if (c != '1')
+                            std::cout << "Invalid outcome value";
+                        else
+                        {
+                            outcome += c;
+                            this->outcome = std::stoi(outcome.c_str());
+                            currentstr = "";
+                        }
+                    }
+                    else if (c >= '0' && c <= '1')
+                    {
+                        std::string outcome;
+                        outcome += c;
+                        this->outcome = std::stoi(outcome.c_str());
+                        currentstr = "";
+                    }
+                    else
+                        std::cout << "Invalid outcome value";
+                }
+                else if (currentstr == "INIT")
+                {
+                    c = getc(f); // Either X or O
+                    // Consume white space
+                    while (c == ' ')
+                    {
+                        c = getc(f);
+                    }
+                    if (c == 'X')
+                        this->first = Board::CellState::X;
+                    else if (c == 'O')
+                        this->first = Board::CellState::O;
+                    else
+                        std::cout << "Invalid initial player\n";
+                }
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                ungetc(c, f);
+                parsePlay(f);
+            }
+            c = getc(f);
+        }
+        fclose(f);
+    }
+
+    // A play is written as row,col (cs is either X or )
+    void parsePlay(FILE *f)
+    {
+        char c = getc(f);
+        while (c != '\n' && c != EOF)
+        {
+            std::string out = "";
+            Play p;
+            // Can be condensed to single loop but left for readability
+            //  Get row
+            while (!(c >= '0' && c <= '9') && c != EOF)
+            {
+                c = getc(f);
+            }
+            // While we have numbers consume
+            while (c >= '0' && c <= '9')
+            {
+                out += c;
+                c = getc(f);
+            }
+            p.row = std ::stoi(out.c_str());
+            out = "";
+            // Get column
+            while (!(c >= '0' && c <= '9') && c != EOF)
+            {
+                c = getc(f);
+            }
+            // While we have numbers consume
+            while (c >= '0' && c <= '9')
+            {
+                out += c;
+                c = getc(f);
+            }
+            p.column = std ::stoi(out.c_str());
+            plays.emplace_back(p);
+        }
+        ungetc(c, f);
+    }
+    void printTest()
+    {
+        std::cout << "Outcome: " << outcome << '\n';
+        std::cout << "First: " << first << '\n';
+        for (long unsigned int i = 0; i < plays.size(); i++)
+        {
+            std::cout << "Play " << i << ": " << plays[i].row << " , " << plays[i].column << '\n';
+        }
+    }
+
+private:
+    std::vector<Play>
+        plays;
+    int outcome;
+    Board::CellState first = Board::CellState::EMPTY;
+};
