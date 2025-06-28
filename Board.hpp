@@ -106,6 +106,18 @@ public:
             }
         }
     }
+    bool isFull()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (getCellValue(i, j) == CellState::EMPTY)
+                    return false;
+            }
+        }
+        return true;
+    }
 
 private:
     // Each 2 bits represents a cell
