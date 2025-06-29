@@ -52,7 +52,7 @@ public:
                         else
                         {
                             outcome += c;
-                            this->outcome = std::stoi(outcome.c_str());
+                            this->outcome = (Board::CellState)std::stoi(outcome.c_str());
                             currentstr = "";
                         }
                     }
@@ -60,7 +60,7 @@ public:
                     {
                         std::string outcome;
                         outcome += c;
-                        this->outcome = std::stoi(outcome.c_str());
+                        this->outcome = (Board::CellState)std::stoi(outcome.c_str());
                         currentstr = "";
                     }
                     else
@@ -161,7 +161,7 @@ public:
             if (outcome.ended)
                 break;
         }
-        if (sameOutcome(outcome))
+        if (!sameOutcome(outcome))
         {
             std::cout << "Outcome not correct expected " << this->outcome << " and got " << outcome.winner << '\n';
         }
@@ -180,6 +180,6 @@ private:
     XOEngine xoe;
     std::vector<Play>
         plays;
-    int outcome;
+    Board::CellState outcome;
     Board::CellState first = Board::CellState::EMPTY;
 };
