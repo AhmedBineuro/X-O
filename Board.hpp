@@ -118,6 +118,10 @@ public:
         }
         return true;
     }
+    void reset()
+    {
+        boardState = 0;
+    }
 
 private:
     // Each 2 bits represents a cell

@@ -3,8 +3,9 @@
 int main()
 {
     Tester t("./test.txt");
-    // XOEngine e;
-    // e.start();
-    t.printTest();
+    XOEngine e;
+    e.start();
+    // t.printTest();
+    // t.runTest();
     return 0;
 }

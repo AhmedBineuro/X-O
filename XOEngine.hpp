@@ -22,8 +22,11 @@ public:
         }
         ended = false;
     }
-
-    // Return -1 for a tie, 0 for X win and 1 for y win
+    void printAsciiBoard()
+    {
+        this->b.printAscii();
+    }
+    // Return -1 for nothing, 0 for tie, 1 for X win and 2 for y win
     int start()
     {
         std::cout << "Starting X-O game!\n";
@@ -48,11 +51,28 @@ public:
             if (e.isEnd(b, cellState))
             {
                 std::cout << player << " won!!!\n";
-                return (cellState - 1);
+                return cellState;
             }
             if (b.isFull())
                 ended = true;
         }
+        return 0;
+    }
+    int step(int row, int column, bool printAscii = true)
+    {
+        std::string player = (xTurn) ? "X" : "O";
+        Board::CellState cellState = (xTurn) ? Board::CellState::X : Board::CellState::O;
+        if (printAscii)
+            this->b.printAscii();
+        std::cout << player << "\'s turn\n";
+        playTurn(row - 1, column - 1);
+        if (e.isEnd(b, cellState))
+        {
+            std::cout << player << " won!!!\n";
+            return cellState;
+        }
+        if (b.isFull())
+            return 0;
         return -1;
     }
 
@@ -73,6 +93,23 @@ public:
         b.setCellValue(row, column, cs);
         xTurn = !xTurn;
         return true;
+    }
+    void reset(Board::CellState first = Board::CellState::EMPTY)
+    {
+        b.reset();
+        switch (first)
+        {
+        case Board::CellState::EMPTY:
+        {
+            xTurn = (bool)(rand() % 2);
+            break;
+        }
+        default:
+        {
+            xTurn = (Board::CellState::X == first);
+            break;
+        }
+        }
     }
 
 private:

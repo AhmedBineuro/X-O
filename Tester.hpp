@@ -55,7 +55,7 @@ public:
                             currentstr = "";
                         }
                     }
-                    else if (c >= '0' && c <= '1')
+                    else if (c >= '0' && c <= '2')
                     {
                         std::string outcome;
                         outcome += c;
@@ -135,11 +135,39 @@ public:
         std::cout << "First: " << first << '\n';
         for (long unsigned int i = 0; i < plays.size(); i++)
         {
-            std::cout << "Play " << i << ": " << plays[i].row << " , " << plays[i].column << '\n';
+            printPlay(i);
+            std::cout << '\n';
         }
+    }
+    void printPlay(int index)
+    {
+        std::cout << "Play " << index << ": " << plays[index].row << " , " << plays[index].column << '\n';
+    }
+    void runTest()
+    {
+        xoe.reset(first);
+        int outcome = -1;
+        int i = 0;
+        for (Play p : plays)
+        {
+            outcome = xoe.step(p.row, p.column, false);
+            std::cout << '\t';
+            printPlay(i);
+            i++;
+            if (outcome != -1)
+                break;
+        }
+        if (outcome != this->outcome)
+        {
+            std::cout << "Outcome not correct expected " << this->outcome << " and got " << outcome << '\n';
+        }
+        else
+            std::cout << "Expected outcome met\n";
+        xoe.printAsciiBoard();
     }
 
 private:
+    XOEngine xoe;
     std::vector<Play>
         plays;
     int outcome;
