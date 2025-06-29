@@ -10,5 +10,4 @@ jobs:
       - uses: actions/checkout@v4
       - run : sudo apt install build-essential
       - run : g++ ./tests/TestMain.cpp -o ./tests/TestMain
-      - run : cd ./tests
       - run : ./TestMain

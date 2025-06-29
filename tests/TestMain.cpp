@@ -3,7 +3,7 @@
 int main()
 {
     Tester t;
-    std::string path = "./games/";
+    std::string path = "./tests/games/";
     std::string rowFileBase = "row";
     std::string colFileBase = "col";
     std::string extension = ".xo";
