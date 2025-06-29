@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "XOEngine.hpp"
+#include "../XOEngine.hpp"
 
 class Tester
 {
@@ -112,6 +112,8 @@ public:
                 out += c;
                 c = getc(f);
             }
+            if (out == "")
+                break;
             p.row = std ::stoi(out.c_str());
             out = "";
             // Get column
@@ -144,27 +146,34 @@ public:
     {
         std::cout << "Play " << index << ": " << plays[index].row << " , " << plays[index].column;
     }
-    void runTest()
+    Evaluator::EndCondition runTest(bool printPlays = true, bool printBoard = true)
     {
         xoe.reset(first);
         Evaluator::EndCondition outcome;
         int i = 0;
         for (Play p : plays)
         {
-            printPlay(i);
+            if (printPlays)
+                printPlay(i);
             std::cout << "\t| ";
             outcome = xoe.step(p.row, p.column, false);
             i++;
             if (outcome.ended)
                 break;
         }
-        if (outcome.winner != this->outcome)
+        if (sameOutcome(outcome))
         {
             std::cout << "Outcome not correct expected " << this->outcome << " and got " << outcome.winner << '\n';
         }
         else
             std::cout << "Expected outcome met\t" << Evaluator::stringifyPattern(outcome.wp) << '\n';
-        xoe.printAsciiBoard();
+        if (printBoard)
+            xoe.printAsciiBoard();
+        return outcome;
+    }
+    bool sameOutcome(Evaluator::EndCondition ec)
+    {
+        return (ec.winner == this->outcome);
     }
 
 private:

@@ -25,7 +25,7 @@ public:
     {
         this->b.printAscii();
     }
-    // Return -1 for nothing, 0 for tie, 1 for X win and 2 for y win
+    // Will start 2 player game
     Evaluator::EndCondition start()
     {
         std::cout << "Starting X-O game!\n";
@@ -62,6 +62,7 @@ public:
         }
         return {Evaluator::WinPattern::None, Board::CellState::EMPTY, true};
     }
+    // Will perform one play and 1 check for winning patterns
     Evaluator::EndCondition step(int row, int column, bool printAscii = true)
     {
         std::string player = (xTurn) ? "X" : "O";

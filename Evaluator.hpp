@@ -8,12 +8,12 @@ public:
     enum WinPattern
     {
         None,
-        Row0,
-        Row1,
+        Row3,
         Row2,
-        Col0,
-        Col1,
+        Row1,
+        Col3,
         Col2,
+        Col1,
         LRDiag,
         RLDiag,
         Draw
@@ -24,17 +24,17 @@ public:
         {
         case None:
             return "None";
-        case Row0:
-            return "Row 1";
         case Row1:
-            return "Row 2";
+            return "Row 1";
         case Row2:
+            return "Row 2";
+        case Row3:
             return "Row 3";
-        case Col0:
-            return "Column 1";
         case Col1:
-            return "Column 2";
+            return "Column 1";
         case Col2:
+            return "Column 2";
+        case Col3:
             return "Column 3";
         case LRDiag:
             return "Left to Right Diagonal";
@@ -62,7 +62,6 @@ public:
         {
             std::bitset<18> comp = shift ? (i << 1) : (i);
             std::bitset<18> temp = (boardState & comp);
-            // std::cout << "Comparing state " << i << ": " << temp << '\n';
             if (temp == comp)
                 return {(WinPattern)index, state, true};
             index++;

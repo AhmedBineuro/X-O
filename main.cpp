@@ -1,8 +1,8 @@
 #include "XOEngine.hpp"
-#include "Tester.hpp"
+#include "./tests/Tester.hpp"
 int main()
 {
-    Tester t("./draw.xo");
+    Tester t("./tests/games/draw.xo");
     XOEngine e;
     // e.start();
     t.runTest();

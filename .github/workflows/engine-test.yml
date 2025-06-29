@@ -1,0 +1,13 @@
+name: X-O engine winning pattern detection test
+on:
+  push:
+    branches: 
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run : sudo apt install build-essential
+      - run : g++ ./tests/TestMain.cpp -o TestMain
+      - run : ./TestMain
