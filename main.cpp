@@ -2,10 +2,9 @@
 #include "Tester.hpp"
 int main()
 {
-    Tester t("./test.txt");
+    Tester t("./draw.xo");
     XOEngine e;
-    e.start();
-    // t.printTest();
-    // t.runTest();
+    // e.start();
+    t.runTest();
     return 0;
 }

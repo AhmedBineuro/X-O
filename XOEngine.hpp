@@ -20,17 +20,16 @@ public:
             break;
         }
         }
-        ended = false;
     }
     void printAsciiBoard()
     {
         this->b.printAscii();
     }
     // Return -1 for nothing, 0 for tie, 1 for X win and 2 for y win
-    int start()
+    Evaluator::EndCondition start()
     {
         std::cout << "Starting X-O game!\n";
-        while (!ended)
+        while (true)
         {
             b.printAscii();
             std::string player = (xTurn) ? "X" : "O";
@@ -48,17 +47,22 @@ public:
                 std::cout << "Type the column location of play: ";
                 std::cin >> column;
             }
-            if (e.isEnd(b, cellState))
+            Evaluator::EndCondition ec = e.isEnd(b, cellState);
+            if (ec.ended)
             {
                 std::cout << player << " won!!!\n";
-                return cellState;
+                std::cout << "Winning pattern: " << e.stringifyPattern(ec.wp) << '\n';
+                return ec;
             }
             if (b.isFull())
-                ended = true;
+            {
+                std::cout << "Draw!\n";
+                return {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
+            }
         }
-        return 0;
+        return {Evaluator::WinPattern::None, Board::CellState::EMPTY, true};
     }
-    int step(int row, int column, bool printAscii = true)
+    Evaluator::EndCondition step(int row, int column, bool printAscii = true)
     {
         std::string player = (xTurn) ? "X" : "O";
         Board::CellState cellState = (xTurn) ? Board::CellState::X : Board::CellState::O;
@@ -66,14 +70,19 @@ public:
             this->b.printAscii();
         std::cout << player << "\'s turn\n";
         playTurn(row - 1, column - 1);
-        if (e.isEnd(b, cellState))
+        Evaluator::EndCondition ec = e.isEnd(b, cellState);
+        if (ec.ended)
         {
             std::cout << player << " won!!!\n";
-            return cellState;
+            std::cout << "Winning pattern: " << e.stringifyPattern(ec.wp) << '\n';
+            return ec;
         }
         if (b.isFull())
-            return 0;
-        return -1;
+        {
+            std::cout << "Draw!\n";
+            return {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
+        }
+        return {Evaluator::WinPattern::None, Board::CellState::EMPTY, false};
     }
 
     // Return true if play was successful
@@ -115,5 +124,5 @@ public:
 private:
     Board b;
     Evaluator e;
-    bool xTurn, ended;
+    bool xTurn;
 };

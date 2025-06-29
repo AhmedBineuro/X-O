@@ -20,6 +20,7 @@ public:
     }
     void loadTest(std::string FileURL)
     {
+        plays.clear();
         FILE *f = fopen(FileURL.c_str(), "r");
         if (f == nullptr)
         {
@@ -141,28 +142,28 @@ public:
     }
     void printPlay(int index)
     {
-        std::cout << "Play " << index << ": " << plays[index].row << " , " << plays[index].column << '\n';
+        std::cout << "Play " << index << ": " << plays[index].row << " , " << plays[index].column;
     }
     void runTest()
     {
         xoe.reset(first);
-        int outcome = -1;
+        Evaluator::EndCondition outcome;
         int i = 0;
         for (Play p : plays)
         {
-            outcome = xoe.step(p.row, p.column, false);
-            std::cout << '\t';
             printPlay(i);
+            std::cout << "\t| ";
+            outcome = xoe.step(p.row, p.column, false);
             i++;
-            if (outcome != -1)
+            if (outcome.ended)
                 break;
         }
-        if (outcome != this->outcome)
+        if (outcome.winner != this->outcome)
         {
-            std::cout << "Outcome not correct expected " << this->outcome << " and got " << outcome << '\n';
+            std::cout << "Outcome not correct expected " << this->outcome << " and got " << outcome.winner << '\n';
         }
         else
-            std::cout << "Expected outcome met\n";
+            std::cout << "Expected outcome met\t" << Evaluator::stringifyPattern(outcome.wp) << '\n';
         xoe.printAsciiBoard();
     }
 
