@@ -8,12 +8,12 @@ public:
     enum WinPattern
     {
         None,
-        Row3,
-        Row2,
         Row1,
-        Col3,
-        Col2,
+        Row2,
+        Row3,
         Col1,
+        Col2,
+        Col3,
         LRDiag,
         RLDiag,
         Draw
@@ -81,12 +81,12 @@ private:
         return reversed;
     }
     std::bitset<18> OWinningStates[8] = {
-        21,    // Row 0 Horizontal
+        86016, // Row 0 Horizontal
         1344,  // Row 1 Horizontal
-        86016, // Row 2 Horizontal
-        4161,  // Column 0 Vertical
+        21,    // Row 2 Horizontal
+        66576, // Column 0 Vertical
         16644, // Column 1 Vertical
-        66576, // Column 2 Vertical
+        4161,  // Column 2 Vertical
         65793, // Left to Right Diagonal
         4368   // Right to Left Diagonal
     };
