@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "Tester.hpp"
 
 int main()
@@ -59,5 +60,13 @@ int main()
         Evaluator::EndCondition ec = t.runTest();
         assert(t.sameOutcome(ec) && ("Failed test " + testName).c_str());
     }
+
+    // Simplified version removed in favour of ordered testing
+    //  for (const auto &it : std::filesystem::directory_iterator(path))
+    //  {
+    //      t.loadTest(it.path());
+    //      Evaluator::EndCondition ec = t.runTest();
+    //      assert(t.sameOutcome(ec));
+    //  }
     std::cout << "\n________Test suite finished________\n";
 }
