@@ -69,17 +69,27 @@ public:
         return {(WinPattern)index, state, false};
     }
 
-private:
-    template <size_t N>
-    std::bitset<N> reverseBitset(const std::bitset<N> &b)
+    // Counts how many of a state is in a win pattern
+    int getCount(Board b, Board::CellState cs = Board::CellState::EMPTY, WinPattern wp = WinPattern::Row1)
     {
-        std::bitset<N> reversed;
-        for (size_t i = 0; i < N; ++i)
+        int count;
+        Board bClone = b;
+        std::bitset<18> wpMask = (cs == Board::CellState::X) ? (OWinningStates[wp - 1] << 1) : (OWinningStates[wp - 1]);
+        std::bitset<18> bitset;
+        if (cs == Board::CellState::EMPTY)
         {
-            reversed[i] = b[N - 1 - i];
+            bitset = (b.getBoardState() & OWinningStateMasks[wp - 1]);
+            count = 3 - bitset.count();
         }
-        return reversed;
+        else
+        {
+            bitset = (b.getBoardState() & OWinningStateMasks[wp - 1]) & wpMask;
+            count = bitset.count();
+        }
+        return count;
     }
+
+private:
     std::bitset<18> OWinningStates[8] = {
         86016, // Row 0 Horizontal
         1344,  // Row 1 Horizontal
@@ -89,5 +99,15 @@ private:
         4161,  // Column 2 Vertical
         65793, // Left to Right Diagonal
         4368   // Right to Left Diagonal
+    };
+    std::bitset<18> OWinningStateMasks[8] = {
+        258048, // Row 0 Horizontal
+        4032,   // Row 1 Horizontal
+        63,     // Row 2 Horizontal
+        199728, // Column 0 Vertical
+        49932,  // Column 1 Vertical
+        12483,  // Column 2 Vertical
+        197379, // Left to Right Diagonal
+        13104   // Right to Left Diagonal
     };
 };

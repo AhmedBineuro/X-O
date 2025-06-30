@@ -10,7 +10,8 @@ public:
     {
         EMPTY,
         X,
-        O
+        O,
+        MASK
     };
     Board()
     {
