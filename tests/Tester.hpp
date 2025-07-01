@@ -5,11 +5,6 @@
 class Tester
 {
 public:
-    struct Play
-    {
-        short row;
-        short column;
-    };
     Tester()
     {
         plays.reserve(5); // The minimum number of plays for a win is 5
@@ -99,7 +94,7 @@ public:
         while (c != '\n' && c != EOF)
         {
             std::string out = "";
-            Play p;
+            Board::Play p;
             // Can be condensed to single loop but left for readability
             //  Get row
             while (!(c >= '0' && c <= '9') && c != EOF)
@@ -144,14 +139,14 @@ public:
     }
     void printPlay(int index)
     {
-        std::cout << "Play " << index << ": " << plays[index].row << " , " << plays[index].column;
+        std::cout << "Board::Play " << index << ": " << plays[index].row << " , " << plays[index].column;
     }
     Evaluator::EndCondition runTest(bool printPlays = true, bool printBoard = true)
     {
         xoe.reset(first);
         Evaluator::EndCondition outcome;
         int i = 0;
-        for (Play p : plays)
+        for (Board::Play p : plays)
         {
             if (printPlays)
                 printPlay(i);
@@ -178,7 +173,7 @@ public:
 
 private:
     XOEngine xoe;
-    std::vector<Play>
+    std::vector<Board::Play>
         plays;
     Board::CellState outcome;
     Board::CellState first = Board::CellState::EMPTY;

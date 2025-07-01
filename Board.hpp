@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <vector>
 class Board
 {
 public:
@@ -12,6 +13,11 @@ public:
         X,
         O,
         MASK
+    };
+    struct Play
+    {
+        short row;
+        short column;
     };
     Board()
     {
@@ -122,6 +128,22 @@ public:
     void reset()
     {
         boardState = 0;
+    }
+    std::vector<Play> getEmptySlots()
+    {
+        std::vector<Play> output(0);
+        for (short i = 0; i < 3; i++)
+        {
+            for (short j = 0; j < 3; j++)
+            {
+                if (getCellValue(i, j) == Board::CellState::EMPTY)
+                {
+                    Play p = {i, j};
+                    output.push_back(p);
+                }
+            }
+        }
+        return output;
     }
 
 private:

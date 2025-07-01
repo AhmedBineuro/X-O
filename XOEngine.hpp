@@ -121,6 +121,10 @@ public:
         }
         }
     }
+    Board getBoard()
+    {
+        return b;
+    }
 
 private:
     Board b;

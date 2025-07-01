@@ -73,8 +73,11 @@ public:
     int getCount(Board b, Board::CellState cs = Board::CellState::EMPTY, WinPattern wp = WinPattern::Row1)
     {
         int count;
+        if (wp == Evaluator::WinPattern::None)
+            return 0;
         Board bClone = b;
-        std::bitset<18> wpMask = (cs == Board::CellState::X) ? (OWinningStates[wp - 1] << 1) : (OWinningStates[wp - 1]);
+        std::bitset<18> wpMask;
+        wpMask = (cs == Board::CellState::X) ? (OWinningStates[wp - 1] << 1) : (OWinningStates[wp - 1]);
         std::bitset<18> bitset;
         if (cs == Board::CellState::EMPTY)
         {
