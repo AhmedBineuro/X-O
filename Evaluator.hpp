@@ -53,20 +53,28 @@ public:
         bool ended;
     };
     // Evaluates if a specific state
-    EndCondition isEnd(Board &b, Board::CellState state)
+    EndCondition isEnd(Board &b)
     {
-        bool shift = (state == Board::CellState::X); // If it is X we need to shift the values by 1
         std::bitset<18> boardState = b.getBoardState();
         int index = 1;
+        // Checking if X won
         for (std::bitset<18> i : OWinningStates)
         {
-            std::bitset<18> comp = shift ? (i << 1) : (i);
+            std::bitset<18> comp = (i << 1);
             std::bitset<18> temp = (boardState & comp);
             if (temp == comp)
-                return {(WinPattern)index, state, true};
+                return {(WinPattern)index, Board::CellState::X, true};
             index++;
         }
-        return {(WinPattern)index, state, false};
+        // Checking if O won
+        for (std::bitset<18> i : OWinningStates)
+        {
+            std::bitset<18> temp = (boardState & i);
+            if (temp == i)
+                return {(WinPattern)index, Board::CellState::O, true};
+            index++;
+        }
+        return {(WinPattern)index, Board::CellState::EMPTY, false};
     }
 
     // Counts how many of a state is in a win pattern

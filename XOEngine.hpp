@@ -47,7 +47,7 @@ public:
                 std::cout << "Type the column location of play: ";
                 std::cin >> column;
             }
-            Evaluator::EndCondition ec = e.isEnd(b, cellState);
+            Evaluator::EndCondition ec = e.isEnd(b);
             if (ec.ended)
             {
                 std::cout << player << " won!!!\n";
@@ -71,7 +71,7 @@ public:
             this->b.printAscii();
         std::cout << player << "\'s turn\n";
         playTurn(row - 1, column - 1);
-        Evaluator::EndCondition ec = e.isEnd(b, cellState);
+        Evaluator::EndCondition ec = e.isEnd(b);
         if (ec.ended)
         {
             std::cout << player << " won!!!\n";
