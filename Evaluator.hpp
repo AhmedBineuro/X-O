@@ -52,31 +52,6 @@ public:
         Board::CellState winner;
         bool ended;
     };
-    // Evaluates if a specific state
-    EndCondition isEnd(Board &b)
-    {
-        std::bitset<18> boardState = b.getBoardState();
-        int index = 1;
-        // Checking if X won
-        for (std::bitset<18> i : OWinningStates)
-        {
-            std::bitset<18> comp = (i << 1);
-            std::bitset<18> temp = (boardState & comp);
-            if (temp == comp)
-                return {(WinPattern)index, Board::CellState::X, true};
-            index++;
-        }
-        // Checking if O won
-        for (std::bitset<18> i : OWinningStates)
-        {
-            std::bitset<18> temp = (boardState & i);
-            if (temp == i)
-                return {(WinPattern)index, Board::CellState::O, true};
-            index++;
-        }
-        return {(WinPattern)index, Board::CellState::EMPTY, false};
-    }
-
     // Counts how many of a state is in a win pattern
     int getCount(Board b, Board::CellState cs = Board::CellState::EMPTY, WinPattern wp = WinPattern::Row1)
     {
@@ -98,6 +73,32 @@ public:
             count = bitset.count();
         }
         return count;
+    }
+    // Evaluates if a specific state
+    EndCondition isEnd(Board &b)
+    {
+        std::bitset<18> boardState = b.getBoardState();
+        int index = 1;
+        // Checking if O won
+        for (std::bitset<18> i : OWinningStates)
+        {
+            std::bitset<18> temp = (boardState & i);
+            if (temp == i)
+                return {(WinPattern)index, Board::CellState::O, false};
+            index++;
+        }
+        // Checking if X won
+        for (std::bitset<18> i : OWinningStates)
+        {
+            std::bitset<18> comp = (i << 1);
+            std::bitset<18> temp = (boardState & comp);
+            if (temp == comp)
+                return {(WinPattern)index, Board::CellState::X, true};
+            index++;
+        }
+        if (b.isFull())
+            return {WinPattern::Draw, Board::CellState::EMPTY, true};
+        return {(WinPattern)index, Board::CellState::EMPTY, false};
     }
 
 private:

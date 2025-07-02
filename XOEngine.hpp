@@ -1,10 +1,11 @@
 #pragma once
 #include "Evaluator.hpp"
+#include "./AI/MinMax.hpp"
 
 class XOEngine
 {
 public:
-    XOEngine(Board::CellState first = Board::CellState::EMPTY)
+    XOEngine(Board::CellState first = Board::CellState::EMPTY, Board::CellState player = Board::CellState::X)
     {
         switch (first)
         {
@@ -20,15 +21,32 @@ public:
             break;
         }
         }
+        this->player = player;
+        m.setState((this->player == Board::CellState::X) ? Board::CellState::O : Board::CellState::X);
     }
     void printAsciiBoard()
     {
         this->b.printAscii();
     }
+    void setPlayer(Board::CellState cs)
+    {
+        this->player = cs;
+        m.setState((this->player == Board::CellState::X) ? Board::CellState::O : Board::CellState::X);
+    }
     // Will start 2 player game
     Evaluator::EndCondition start()
     {
         std::cout << "Starting X-O game!\n";
+        std::cout << "AI? (y/n):\t";
+        bool ai = false;
+        std::string input;
+        while ((input != "y") && (input != "n"))
+        {
+            std::cout << "Invalid input, put y for yes or n for no\n";
+            std::cin >> input;
+        }
+        if (input == "y")
+            ai = true;
         while (true)
         {
             b.printAscii();
@@ -36,16 +54,26 @@ public:
             Board::CellState cellState = (xTurn) ? Board::CellState::X : Board::CellState::O;
             std::cout << player << "\'s turn\n";
             int row = -1, column = -1;
-            std::cout << "Type the row location of play: ";
-            std::cin >> row;
-            std::cout << "Type the column location of play: ";
-            std::cin >> column;
-            while (!playTurn(row - 1, column - 1) && !b.isFull())
+            if (ai && (this->player != cellState))
+            {
+                Board::Play p = this->m.decidePlay(this->b);
+                row = p.row;
+                column = p.column;
+                playTurn(row, column);
+            }
+            else
             {
                 std::cout << "Type the row location of play: ";
                 std::cin >> row;
                 std::cout << "Type the column location of play: ";
                 std::cin >> column;
+                while (!playTurn(row - 1, column - 1) && !b.isFull())
+                {
+                    std::cout << "Type the row location of play: ";
+                    std::cin >> row;
+                    std::cout << "Type the column location of play: ";
+                    std::cin >> column;
+                }
             }
             Evaluator::EndCondition ec = e.isEnd(b);
             if (ec.ended)
@@ -78,7 +106,7 @@ public:
             std::cout << "Winning pattern: " << e.stringifyPattern(ec.wp) << '\n';
             return ec;
         }
-        if (b.isFull())
+        else if (ec.wp == Evaluator::WinPattern::Draw)
         {
             std::cout << "Draw!\n";
             return {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
@@ -130,4 +158,6 @@ private:
     Board b;
     Evaluator e;
     bool xTurn;
+    Board::CellState player;
+    MinMaxAi m;
 };

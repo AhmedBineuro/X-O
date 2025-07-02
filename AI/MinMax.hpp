@@ -1,61 +1,88 @@
-#include "./Board.hpp"
-#include "./XOEngine.hpp"
+#pragma once
+#include "../Board.hpp"
+#include "../Evaluator.hpp"
 
 class MinMaxAi
 {
 public:
-    MinMaxAi() {}
-    int evaluate(Board b, int depth = 5, bool max = true)
+    struct Decision
     {
-        Evaluator::EndCondition ec;
-        int output;
-        if (depth == 0)
+        Board::Play play = {-1, -1};
+        int score = 0;
+    };
+    MinMaxAi() {}
+    Decision evaluate(Board b, int depth = 0, bool max = true)
+    {
+        Evaluator::EndCondition ec = ev.isEnd(b);
+        Decision output;
+        if (ec.ended)
         {
             Board::CellState ocs = (this->cs == Board::CellState::X) ? Board::CellState::O : Board::CellState::X;
-            ec = ev.isEnd(b);
-            if (ec.ended)
+            if (ec.winner == this->cs)
             {
-                if (ec.winner == cs)
-                {
-                    output = 1;
-                }
-                else if (ec.winner == ocs)
-                {
-                    output = -1;
-                }
-                else
-                {
-                    output = 0;
-                }
+                output.score = 10;
+            }
+            else if (ec.winner == ocs)
+            {
+                output.score = -10;
+            }
+            else
+            {
+                output.score = 0;
             }
         }
         else if (max)
         {
             std::vector<Board::Play> empty = b.getEmptySlots();
-            int val = -1 * INFINITY;
+            int val = INT_MIN;
+            Board::Play p;
             for (auto play : empty)
             {
                 b.setCellValue(play.row, play.column, this->cs);
-                int score = evaluate(b, depth - 1, !max);
+                Decision score = evaluate(b, depth + 1, false);
+
+                // if (depth == 0)
+                // {
+                //     std::cout << "____________Depth " << depth << "____________\n";
+                //     std::cout << "\tPlay: " << play.row << "," << play.column << " Score:" << score.score << '\n';
+                //     b.printAscii();
+                // }
                 b.setCellValue(play.row, play.column, Board::CellState::EMPTY);
-                if (score > val)
-                    val = score;
+                if (score.score > val)
+                {
+                    val = score.score;
+                    p = play;
+                }
             }
-            output = val;
+            output.score = val;
+            output.play = p;
         }
         else
         {
             std::vector<Board::Play> empty = b.getEmptySlots();
-            int val = INFINITY;
+            int val = INT_MAX;
+            Board::Play p;
             for (auto play : empty)
             {
-                b.setCellValue(play.row, play.column, this->cs);
-                int score = evaluate(b, depth - 1, !max);
+                Board::CellState c = (this->cs == Board::CellState::X) ? Board::CellState::O : Board::CellState::X;
+                b.setCellValue(play.row, play.column, c);
+                Decision score = evaluate(b, depth + 1, true);
+                // if (depth == 0)
+                // {
+                //     std::cout << "____________Depth " << depth << "____________\n";
+                //     std::cout << "\tPlay: " << play.row << "," << play.column << " Score:" << score.score << '\n';
+                //     b.printAscii();
+                // }
                 b.setCellValue(play.row, play.column, Board::CellState::EMPTY);
-                if (score < val)
-                    val = score;
+                if (score.score < val)
+                {
+                    val = score.score;
+                    p = play;
+                    ;
+                }
             }
-            output = val;
+            output.score = val;
+            output.play = p;
         }
         return output;
     }
@@ -66,19 +93,21 @@ public:
     Board::Play decidePlay(Board b)
     {
         std::vector<Board::Play> empty = b.getEmptySlots();
-        int val = -1 * INFINITY;
+        int val = -1 * INT_MAX;
         Board::Play p;
         for (auto play : empty)
         {
             b.setCellValue(play.row, play.column, this->cs);
-            int score = evaluate(b);
+            Decision score = evaluate(b, 0, false);
             b.setCellValue(play.row, play.column, Board::CellState::EMPTY);
-            if (score > val)
+            if (score.score > val)
             {
-                val = score;
+                val = score.score;
                 p = play;
+                ;
             }
         }
+        return p;
     }
 
 private:

@@ -52,12 +52,14 @@ public:
         {
             newState.set(16 - flatStartIndex, (state & Board::CellState::O));
         }
-        else
+
+        if (state == Board::CellState::EMPTY)
         {
-            newState.set(16 - flatStartIndex, false);
-            newState.set(16 - flatStartIndex + 1, false);
+            boardState.set(16 - flatStartIndex, false);
+            boardState.set(16 - flatStartIndex + 1, false);
         }
-        boardState |= newState;
+        else
+            boardState |= newState;
     }
     void print()
     {
