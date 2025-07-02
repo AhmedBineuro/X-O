@@ -84,7 +84,7 @@ public:
         {
             std::bitset<18> temp = (boardState & i);
             if (temp == i)
-                return {(WinPattern)index, Board::CellState::O, false};
+                return {(WinPattern)index, Board::CellState::O, true};
             index++;
         }
         // Checking if X won

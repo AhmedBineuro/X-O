@@ -11,7 +11,7 @@ public:
         {
         case Board::CellState::EMPTY:
         {
-            srand(time(NULL));
+            srand(time(0));
             xTurn = (bool)(rand() % 2);
             break;
         }
@@ -40,6 +40,7 @@ public:
         std::cout << "AI? (y/n):\t";
         bool ai = false;
         std::string input;
+        std::cin >> input;
         while ((input != "y") && (input != "n"))
         {
             std::cout << "Invalid input, put y for yes or n for no\n";
@@ -76,7 +77,7 @@ public:
                 }
             }
             Evaluator::EndCondition ec = e.isEnd(b);
-            if (ec.ended)
+            if (ec.ended && (ec.wp!=Evaluator::WinPattern::Draw))
             {
                 std::cout << player << " won!!!\n";
                 std::cout << "Winning pattern: " << e.stringifyPattern(ec.wp) << '\n';

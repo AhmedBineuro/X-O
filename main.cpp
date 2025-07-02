@@ -16,8 +16,7 @@ int main()
     // b.setCellValue(p.row, p.column, Board::CellState::X);
     // std::cout << "After AI play" << "AI choice is " << p.row << "," << p.column << '\n';
     // b.printAscii();
-    srand(time(NULL));
-    XOEngine xoe;
+    XOEngine xoe=XOEngine(Board::CellState::X,Board::CellState::X);
     xoe.start();
     return 0;
 }
