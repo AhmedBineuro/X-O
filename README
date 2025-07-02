@@ -1,5 +1,5 @@
 # X-O game
 - This is a simple implementation of the classic TicTacToe game. The board is enoced in a single 18 bit bitset where every 2 bits is a cell with a state of Empty, X, or O. The winning patterns are also encoded in 18 bit bitsets. The idea behind this simple implementations is to append multiple different AI algorithms to it and explore them. 
 - At the current time this is what is being researched and developed
-  - [ ] MinMax algorithm
+  - [X] MinMax algorithm
   - [ ] Reinforcment learning
