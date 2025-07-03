@@ -1,17 +1,28 @@
-# X-O game
-- This is a simple command line implementation of the classic TicTacToe game. The board is enoced in a single 18 bit bitset where every 2 bits is a cell with a state of Empty, X, or O. The winning patterns are also encoded in 18 bit bitsets. 
-- The Game features a simple AI using MinMax algorithm.
-  - The AI has 5 difficulties with 3 and above almost being impossible to win against
-## Installing and running
+# X-O Game
+
+This is a simple command line implementation of the classic TicTacToe game. The board is encoded in a single 18-bit bitset where every 2 bits represent a cell with a state of Empty, X, or O. The winning patterns are also encoded in 18-bit bitsets.
+
+The game features a simple AI using the MinMax algorithm.
+
+- The AI has 5 difficulty levels, with levels 3 and above being nearly impossible to beat.
+
+## Installing and Running
+
 ### Requirements
+
 - A C++ compiler
 - Makefile
-### Helpful commands
-- `make XOEAI` : to compile and run the game
-  - `make runXOEAI` : to run the compiled game again
-- `make test`: to compile and run the test suite
-  - `make runTest`: to run the compiled test suit program again
-- `make clean`: to delete the generated executables
+
+### Helpful Commands
+
+- `make XOEAI` — compile and run the game  
+- `make runXOEAI` — run the compiled game again  
+- `make test` — compile and run the test suite  
+- `make runTest` — run the compiled test suite again  
+- `make clean` — delete the generated executables
+
 ## Note
-- Previously I was going to develop a handful of AI models on top of this game for learning purposes. At the end, I chose to implment only 1 here and the others for more complex projects where the benefits of each model would be best showcased.
-- Maybe I will add a graphical application version in the future but for now this is sufficient.
+
+Previously, I was planning to develop a handful of AI models on top of this game for learning purposes. Eventually, I chose to implement only one here, and reserve the others for more complex projects where the benefits of each model could be better showcased.
+
+Maybe I will add a graphical application version in the future, but for now this is sufficient.
