@@ -78,7 +78,7 @@ public:
     EndCondition isEnd(Board &b)
     {
         std::bitset<18> boardState = b.getBoardState();
-        int index = 1;
+        int index = 1; //The index/value of the enum for the pattern
         // Checking if O won
         for (std::bitset<18> i : OWinningStates)
         {
@@ -88,6 +88,7 @@ public:
             index++;
         }
         // Checking if X won
+        index =1; //The index/value of the enum for the pattern
         for (std::bitset<18> i : OWinningStates)
         {
             std::bitset<18> comp = (i << 1);

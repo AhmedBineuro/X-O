@@ -36,11 +36,14 @@ public:
     // Will start 2 player game
     Evaluator::EndCondition start()
     {
+        this->running=true;
+        this->b.reset();
         std::cout << "Starting X-O game!\n";
-        std::cout << "AI? (y/n):\t";
+        std::cout << "AI? (y/n): ";
         bool ai = false;
         std::string input;
         std::cin >> input;
+        Evaluator::EndCondition output;
         while ((input != "y") && (input != "n"))
         {
             std::cout << "Invalid input, put y for yes or n for no\n";
@@ -48,7 +51,19 @@ public:
         }
         if (input == "y")
             ai = true;
-        while (true)
+        if(ai){
+            input="";
+            std::cout << "AI Difficulty? (0-5 [default is 2]): ";
+            std::cin >> input;
+            while((input.length()>1)||(input.c_str()[0]<'0')||(input.c_str()[0]>'5')){
+                std::cout << "Invalid input, put a value between 0 to 5\n";
+                std::cin>>input;
+            }
+            int difficulty=2;
+            difficulty=std::stoi(input);
+            this->m.setDepthLimit(difficulty);
+        }
+        while (this->running)
         {
             b.printAscii();
             std::string player = (xTurn) ? "X" : "O";
@@ -81,15 +96,17 @@ public:
             {
                 std::cout << player << " won!!!\n";
                 std::cout << "Winning pattern: " << e.stringifyPattern(ec.wp) << '\n';
-                return ec;
+                output= ec;
+                this->running=false;
             }
             if (b.isFull())
             {
                 std::cout << "Draw!\n";
-                return {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
+                output= {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
+                this->running=false;
             }
         }
-        return {Evaluator::WinPattern::None, Board::CellState::EMPTY, true};
+        return output;
     }
     // Will perform one play and 1 check for winning patterns
     Evaluator::EndCondition step(int row, int column, bool printAscii = true)
@@ -133,6 +150,7 @@ public:
         xTurn = !xTurn;
         return true;
     }
+
     void reset(Board::CellState first = Board::CellState::EMPTY)
     {
         b.reset();
@@ -154,11 +172,14 @@ public:
     {
         return b;
     }
+    void setDepthLimit(int newDepth){
+        this->m.setDepthLimit(newDepth);
+    }
 
 private:
     Board b;
     Evaluator e;
-    bool xTurn;
+    bool xTurn,running=false;;
     Board::CellState player;
     MinMaxAi m;
 };

@@ -15,7 +15,7 @@ public:
     {
         Evaluator::EndCondition ec = ev.isEnd(b);
         Decision output;
-        if (ec.ended)
+        if (ec.ended||this->maxDepth==depth)
         {
             Board::CellState ocs = (this->cs == Board::CellState::X) ? Board::CellState::O : Board::CellState::X;
             if (ec.winner == this->cs)
@@ -109,8 +109,11 @@ public:
         }
         return p;
     }
-
+    void setDepthLimit(int newDepth){
+        this->maxDepth=newDepth;
+    }
 private:
     Evaluator ev;
     Board::CellState cs;
+        int maxDepth=INT_MAX;
 };

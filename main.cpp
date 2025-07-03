@@ -17,6 +17,19 @@ int main()
     // std::cout << "After AI play" << "AI choice is " << p.row << "," << p.column << '\n';
     // b.printAscii();
     XOEngine xoe=XOEngine(Board::CellState::X,Board::CellState::X);
-    xoe.start();
+    xoe.setDepthLimit(1);
+    std::string input;
+    while(xoe.start().ended){
+        std::cout << "Try Again? (y/n): ";
+        std::cin >> input;
+        while ((input != "y") && (input != "n")){
+            std::cout << "Invalid input, put y for yes or n for no\n";
+            std::cin >> input;
+        }
+        if (input == "n")
+            break;
+        xoe.reset();
+        std::cout<<"\n\n\n\n";
+    }
     return 0;
 }

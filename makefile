@@ -1,15 +1,21 @@
-buildMain:
-	g++ main.cpp -o TicTacToe
+buildXoeai:
+	g++ main.cpp -o XOEAI
 buildTest:
 	g++ ./tests/TestMain.cpp -o ./tests/TestMain
 
-main: buildMain
-	./TicTacToe
+runXOEAI: ./XOEAI
+	./XOEAI
+
+runTest: ./tests/TestMain
+	./tests/TestMain
+
+XOEAI: buildXoeai
+	./XOEAI
 test: buildTest
 	./tests/TestMain
 
 clean:
-	rm ./TicTacToe
+	rm ./XOEAI
 	rm ./tests/TestMain
 
 
