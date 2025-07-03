@@ -1,1 +1,17 @@
 # X-O game
+- This is a simple command line implementation of the classic TicTacToe game. The board is enoced in a single 18 bit bitset where every 2 bits is a cell with a state of Empty, X, or O. The winning patterns are also encoded in 18 bit bitsets. 
+- The Game features a simple AI using MinMax algorithm.
+  - The AI has 5 difficulties with 3 and above almost being impossible to win against
+## Installing and running
+### Requirements
+- A C++ compiler
+- Makefile
+### Helpful commands
+- `make XOEAI` : to compile and run the game
+  - `make runXOEAI` : to run the compiled game again
+- `make test`: to compile and run the test suite
+  - `make runTest`: to run the compiled test suit program again
+- `make clean`: to delete the generated executables
+## Note
+- Previously I was going to develop a handful of AI models on top of this game for learning purposes. At the end, I chose to implment only 1 here and the others for more complex projects where the benefits of each model would be best showcased.
+- Maybe I will add a graphical application version in the future but for now this is sufficient.
