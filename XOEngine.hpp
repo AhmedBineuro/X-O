@@ -117,19 +117,20 @@ public:
             this->b.printAscii();
         std::cout << player << "\'s turn\n";
         playTurn(row - 1, column - 1);
+        Evaluator::EndCondition output = {Evaluator::WinPattern::None, Board::CellState::EMPTY, false};;
         Evaluator::EndCondition ec = e.isEnd(b);
-        if (ec.ended)
+        if (ec.ended && (ec.wp!=Evaluator::WinPattern::Draw))
         {
             std::cout << player << " won!!!\n";
             std::cout << "Winning pattern: " << e.stringifyPattern(ec.wp) << '\n';
-            return ec;
+            output= ec;
         }
-        else if (ec.wp == Evaluator::WinPattern::Draw)
+        if (b.isFull())
         {
             std::cout << "Draw!\n";
-            return {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
+            output= {Evaluator::WinPattern::Draw, Board::CellState::EMPTY, true};
         }
-        return {Evaluator::WinPattern::None, Board::CellState::EMPTY, false};
+        return output;
     }
 
     // Return true if play was successful
